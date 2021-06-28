@@ -6,18 +6,19 @@
 #include <fstream>
 
 
-std::string FunctionChecksumGenerator::GetFunctionStr (const int lineStart, const int lineEnd, std::ifstream& inFile)
+std::string FunctionChecksumGenerator::GetFunctionStr (const unsigned int lineStart, const unsigned int lineEnd, std::ifstream& inFile)
 {
 	std::string functionStrainStr;
 	std::string lineStr;
 	while (std::getline (inFile, lineStr)) {
 		fileLine++;
-		if (fileLine <= lineStart)
+		if (fileLine < lineStart)
 			continue;
-		if (fileLine >= lineEnd)
-			break;
 
 		functionStrainStr.append (lineStr);
+
+		if (fileLine >= lineEnd - 1)
+			break;
 	}
 	return functionStrainStr;
 }
@@ -36,7 +37,8 @@ std::string FunctionChecksumGenerator::GetFunctionStrain (const std::string& fun
 		if (countBracket == 1)
 			isStarted = true;
 
-		functionStrainStr.push_back (functionStr[i]);
+		if (isStarted)
+			functionStrainStr.push_back (functionStr[i]);
 
 		if (isStarted && countBracket == 0)
 			break;

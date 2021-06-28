@@ -27,7 +27,7 @@ public:
 	bool Generate ();
 
 private:
-	std::string GetFunctionStr (const int lineStart, const int lineEnd, std::ifstream& inFile);
+	std::string GetFunctionStr (const unsigned int lineStart, const unsigned int lineEnd, std::ifstream& inFile);
 	std::string GetFunctionStrain (const std::string& functionStr);
 	void GenerateFunctionChecksum (const FunctionLocation& function, unsigned int nextFunctionLine, std::ifstream& inFile);
 

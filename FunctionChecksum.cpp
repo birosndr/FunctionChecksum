@@ -15,6 +15,7 @@ std::vector<std::pair<FunctionLocation, unsigned int>> GenerateFunctionsChecksum
 	parser.Parse ();
 
 #ifdef PRINT2OUTPUT
+	std::cout << std::endl << "Parsed ctag data:" << std::endl;
 	for (const auto& act : parser.GetFunctionLocations ()) {
 		std::cout << act.functionName << " " << act.line << " " << act.functionFile << " " << act.functionHeader << std::endl;
 	}
@@ -24,6 +25,7 @@ std::vector<std::pair<FunctionLocation, unsigned int>> GenerateFunctionsChecksum
 	generator.Generate ();
 
 #ifdef PRINT2OUTPUT
+	std::cout << std::endl << "Generator Checksum output:" << std::endl;
 	for (const auto& act : generator.GetFunctionChecksums ()) {
 		std::cout << act.first.functionHeader << " " << act.second << std::endl;
 	}
@@ -48,14 +50,16 @@ bool IsFunctionDiffer (const std::pair<FunctionLocation, unsigned int>& chAct, c
 {
 	std::vector<std::pair<FunctionLocation, unsigned int>> filteredBaseChecksums = FilterSourceChecksumsByName (chAct.first.functionName, baseChecksums);
 
+	bool hasEqualFunctionHeader = false;
 	for (std::size_t i = 0; i < filteredBaseChecksums.size (); i++) {
 		if (chAct.first.functionHeader == filteredBaseChecksums[i].first.functionHeader) {
-			if (chAct.second != filteredBaseChecksums[i].second)
-				return true;
+			hasEqualFunctionHeader = true;
+			if (chAct.second == filteredBaseChecksums[i].second)
+				return false;
 		}
 	}
 
-	return false;
+	return !hasEqualFunctionHeader;
 }
 
 
@@ -99,7 +103,7 @@ int main (int argc, char* const argv[])
 	if (CheckFiles (argv)) {
 		std::vector<FunctionLocation> differentFunctions = GenerateDifference (argv[1], argv[2], argv[3], argv[4]);
 		for (const auto& act : differentFunctions) {
-			std::cout << act.functionName << " " << act.functionFile << std::endl;
+			std::cout << act.functionName << " " << act.functionHeader << std::endl;
 		}
 		return 0;
 	}
