@@ -50,16 +50,14 @@ bool IsFunctionDiffer (const std::pair<FunctionLocation, unsigned int>& chAct, c
 {
 	std::vector<std::pair<FunctionLocation, unsigned int>> filteredBaseChecksums = FilterSourceChecksumsByName (chAct.first.functionName, baseChecksums);
 
-	bool hasEqualFunctionHeader = false;
 	for (std::size_t i = 0; i < filteredBaseChecksums.size (); i++) {
 		if (chAct.first.functionHeader == filteredBaseChecksums[i].first.functionHeader) {
-			hasEqualFunctionHeader = true;
 			if (chAct.second == filteredBaseChecksums[i].second)
 				return false;
 		}
 	}
 
-	return !hasEqualFunctionHeader;
+	return true;
 }
 
 
